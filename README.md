@@ -30,5 +30,6 @@ To get started with this project, follow these steps:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/P33TheWhite/mazeProject.git
-   cd mazeProject
+   git clone https://github.com/P33TheWhite/INH.git
+   cd INH
+   python3 main.py
