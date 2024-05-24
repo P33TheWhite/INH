@@ -15,7 +15,6 @@ The system can be used in two distinct ways:
 ## Benefits
 
 By combining these technologies, the project offers a flexible room management solution that can be adapted to different needs and platforms.
-The use of Docker ensures that the project can be easily deployed and run in various environments, making it both scalable and efficient.
 
 ## Technologies Used
 
