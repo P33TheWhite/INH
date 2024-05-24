@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- import de jQuery pour les requêtes AJAX -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../static/style.css">
+    <link rel="shortcut icon" type="icon" href="../static/placeholder.png">
+    
+    <title>inh_web</title>
+</head>
+<body> 
+    <h1>inh_web</h1>
+    
+    <div class="all">
+        <button id="searchButton" onclick="jsonRecovery()">Rechercher une salle</button>
+        <div id="classButtons" class="button-container" style="display: none;">
+            <!-- boutons des salles seront ajoutés ici dynamiquement -->
+        </div>
+        <div id="resultBox" class="box" style="display: none;">
+            <!-- résultats seront ajoutés ici dynamiquement -->
+        </div>
+    </div>
+
+    <script>
+        const salles = ["E101", "E102", "E103", "E104", "E105", "E106", "E107", "E108", "E109", "E209", "E210", "E211", "E212", "E213", "E214", "E215", "E217", "E218"];
+
+        function jsonRecovery() {
+            // Appel AJAX pour exécuter la fonction build_Json du côté serveur
+            $.ajax({
+                url: '/build_json',
+                type: 'POST',
+                success: function(response) {
+                    //console.log('build_Json exécuté avec succès', response);
+                    resultButtons();
+                },
+                error: function(error) {
+                    //console.error('Erreur lors de l\'exécution de build_Json', error);
+                }
+            });
+        }
+
+        function resultButtons() {
+            // Masquer le bouton de recherche
+            $('#searchButton').hide();
+            // Afficher les boutons de classe
+            $('#classButtons').empty();
+            salles.forEach(salle => {
+                $('#classButtons').append(`<button onclick="searchRoom('${salle}')">${salle}</button>`);
+            });
+            $('#classButtons').show();
+        }
+
+        function searchRoom(location) {
+            // Envoi de la requête AJAX pour obtenir les cours dans la salle sélectionnée
+            $.ajax({
+                url: '/inh_web',
+                type: 'GET',
+                data: { location: location },
+                success: function(response) { // Fonction exécutée en cas de succès de la requête
+                    // Afficher les cours dans resultBox
+                    if (response.length > 0) {
+                        let resultHtml = "";
+                        if ("Cours en cours" in response[0]) {
+                            resultHtml = `<p>Utilisation de la salle ${location} en cours de ${response[0]["Début"]} à ${response[0]["Fin"]} avec ${response[0]["Prof"]}.</p>`;
+                        } else if ("Prochain cours" in response[0]) {
+                            resultHtml = `<p>Prochain cours dans la salle ${location} à ${response[0]["Prochain cours"]} avec ${response[0]["Prof1"]}.</p>`;
+                        } else {
+                            resultHtml = `<p>Aucun cours n'est prévu dans la salle ${location} aujourd'hui.</p>`;
+                        }
+                        $('#resultBox').html(resultHtml);
+                    } else {
+                        $('#resultBox').html(`<p>Aucun cours n'est prévu dans la salle ${location} aujourd'hui.</p>`);
+                    }
+                    $('#resultBox').show();
+                }
+            });
+        }
+    </script>    
+</body>
+</html>
