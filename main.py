@@ -101,27 +101,44 @@ def json1(fixed_time=None):
 
         if current_courses:
             for current_course in current_courses:
-                salles_remplies.append({
-                    salle: {
-                        "Début": current_course['start_time'],
-                        "Fin": current_course['end_time'],
-                        "Prof": current_course['organizer'],
-                        "Résumé": current_course['summary']
-                    }
-                })
+                course_info = {
+                    "Début": current_course['start_time'],
+                    "Fin": current_course['end_time'],
+                    "Prof": current_course['organizer'],
+                    "Résumé": current_course['summary']
+                }
+                
+                # Vérifier les doublons dans salles_remplies
+                already_exists = False
+                for course in salles_remplies:
+                    if course.get(salle) == course_info:
+                        already_exists = True
+                        break
+                
+                if not already_exists:
+                    salles_remplies.append({salle: course_info})
         else:
             next_course_info = next_course("cours_du_jour.json", salle, fixed_time)
             if next_course_info:
-                salles_vide_prochain_cours.append({
-                    salle: {
-                        "Début": next_course_info['start_time'],
-                        "Fin": next_course_info['end_time'],
-                        "Prof": next_course_info['organizer'],
-                        "Résumé": next_course_info['summary']
-                    }
-                })
+                course_info = {
+                    "Début": next_course_info['start_time'],
+                    "Fin": next_course_info['end_time'],
+                    "Prof": next_course_info['organizer'],
+                    "Résumé": next_course_info['summary']
+                }
+                
+                # Vérifier les doublons dans salles_vide_prochain_cours
+                already_exists = False
+                for course in salles_vide_prochain_cours:
+                    if course.get(salle) == course_info:
+                        already_exists = True
+                        break
+                
+                if not already_exists:
+                    salles_vide_prochain_cours.append({salle: course_info})
 
-    salles_vide_journee = [salle for salle in toutes_salles if salle not in salles_remplies and salle not in salles_vide_prochain_cours]
+
+    salles_vide_journee = [salle for salle in toutes_salles if salle not in salles_remplies and salle not in salles_vide_prochain_cours and salle!="A001"]
 
     resultat = {
         "salles_vide_journee": {
@@ -238,7 +255,9 @@ app = Flask(__name__)
 def build_response_api():
     
     paris_tz = pytz.timezone('Europe/Paris')
-    fixed_time = "2024-05-24T08:36:42.972298+02:00"
+    #fixed_time = "2024-05-24T08:36:42.972298+02:00"
+    fixed_time = None
+
     
     global oldTime
     
@@ -256,7 +275,6 @@ def build_response_api():
     
     #verification de cbn temps j'ai télécharger les fichier et plus de 30min je retelecharge
   
-    # fixed_time = None
 
     response = json1(fixed_time)
     return jsonify(response)
