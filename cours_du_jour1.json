@@ -1,0 +1,74 @@
+{
+    "salles_vide_journee": {
+        "locations": [
+            "E101",
+            "E103",
+            "E104",
+            "E107",
+            "E108",
+            "E210",
+            "E211",
+            "E212",
+            "E213",
+            "E214",
+            "E215",
+            "E217"
+        ]
+    },
+    "salle_remplis": [
+        {
+            "E105": {
+                "D\u00e9but": "11:30",
+                "Fin": "13:00",
+                "Prof": "EHSAN MUHAMMAD",
+                "R\u00e9sum\u00e9": "TD - Informatique"
+            }
+        },
+        {
+        "E209": 
+            {
+                "D\u00e9but": "11:30",
+                "Fin": "13:00",
+                "Prof": "FRUTON PAUL",
+                "R\u00e9sum\u00e9": "TD - Meca. point Pr\u00e9Ing 1 MI"
+            }
+        }
+        ,
+        {
+            "E218": 
+            {
+                "D\u00e9but": "11:30",
+                "Fin": "13:00",
+                "Prof": "PALAFOX JORDY",
+                "R\u00e9sum\u00e9": "CM - Int\u00e9gration et proba"
+            }
+        }
+
+    ],
+    "salle_vide_prochain_cours": {
+        "E102": [
+            {
+                "D\u00e9but": "14:15",
+                "Fin": "15:45",
+                "Prof": "DUJOL ROMAIN",
+                "R\u00e9sum\u00e9": "TD - Alg\u00e8bre lin\u00e9aire et bi"
+            }
+        ],
+        "E106": [
+            {
+                "D\u00e9but": "16:00",
+                "Fin": "17:30",
+                "Prof": "DECOURCHELLE INES",
+                "R\u00e9sum\u00e9": "TD - Informatique"
+            }
+        ],
+        "E109": [
+            {
+                "D\u00e9but": "16:00",
+                "Fin": "17:30",
+                "Prof": "WOLFF AURELIE",
+                "R\u00e9sum\u00e9": "TD - Meca. point Pr\u00e9Ing 1 MI"
+            }
+        ]
+    }
+}

@@ -1,0 +1,79 @@
+[
+    {
+        "start_time": "08:00",
+        "end_time": "09:30",
+        "summary": "CM - Analyse Pr\u00c3\u00a9Ing 1 MI",
+        "location": "A001",
+        "organizer": "LABRADOR BORIS"
+    },
+    {
+        "start_time": "09:45",
+        "end_time": "11:15",
+        "summary": "TD - Analyse Pr\u00c3\u00a9Ing 1 MI",
+        "location": "E212",
+        "organizer": "LABRADOR BORIS"
+    },
+    {
+        "start_time": "08:00",
+        "end_time": "09:30",
+        "summary": "CM - Analyse Pr\u00c3\u00a9Ing 1 MI",
+        "location": "A001",
+        "organizer": "LABRADOR BORIS"
+    },
+    {
+        "start_time": "09:45",
+        "end_time": "11:15",
+        "summary": "TD - Meca. point Pr\u00c3\u00a9Ing 1 MI",
+        "location": "E214",
+        "organizer": "FRUTON PAUL"
+    },
+    {
+        "start_time": "09:45",
+        "end_time": "11:15",
+        "summary": "TD - int\u00c3\u00a9gration et proba",
+        "location": "E109",
+        "organizer": "PALAFOX JORDY"
+    },
+    {
+        "start_time": "16:30",
+        "end_time": "17:00",
+        "summary": "Examens - Ondes",
+        "location": "A001",
+        "organizer": "FRUTON PAUL"
+    },
+    {
+        "start_time": "15:00",
+        "end_time": "16:30",
+        "summary": "Examens - Ondes",
+        "location": "A001",
+        "organizer": "FRUTON PAUL"
+    },
+    {
+        "start_time": "09:45",
+        "end_time": "11:15",
+        "summary": "TD - Alg\u00c3\u00a8bre lin\u00c3\u00a9aire et bi",
+        "location": "E107",
+        "organizer": "DUJOL ROMAIN"
+    },
+    {
+        "start_time": "08:00",
+        "end_time": "09:30",
+        "summary": "TD - Informatique",
+        "location": "E105",
+        "organizer": "DECOURCHELLE INES"
+    },
+    {
+        "start_time": "16:30",
+        "end_time": "17:00",
+        "summary": "Examens - Ondes",
+        "location": "A001",
+        "organizer": "FRUTON PAUL"
+    },
+    {
+        "start_time": "15:00",
+        "end_time": "16:30",
+        "summary": "Examens - Ondes",
+        "location": "A001",
+        "organizer": "FRUTON PAUL"
+    }
+]
