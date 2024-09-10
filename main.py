@@ -5,7 +5,7 @@ import json
 import os
 
 def import_calendar():
-    urls = ["https://cytt.app/P1G2.ics", "https://cytt.app/P1G3.ics", "https://cytt.app/P2G1.ics", "https://cytt.app/P2G2.ics"]
+    urls = ["https://cytt.app/H4ripwEu4L.ics"]
     calendar = []
     for url in urls:
         response = requests.get(url)
@@ -59,8 +59,8 @@ def build_Json(calendar_file, fixed_time=None):
                 if dtend_paris.date() == today:
                     event['end_time'] = dtend_paris.strftime('%H:%M')
             elif line.startswith('SUMMARY:') and inside_vevent:
-                location = line.strip().split(':', 1)[1]
-                event['summary'] = location.strip()
+                summary = line.strip().split(':', 1)[1]
+                event['summary'] = summary.strip()
             elif line.startswith('LOCATION:') and inside_vevent:
                 location = line.strip().split(':', 1)[1]
                 event['location'] = location.strip()
@@ -68,7 +68,7 @@ def build_Json(calendar_file, fixed_time=None):
                 organizer = line.strip().split(':', 1)[1]
                 event['organizer'] = organizer.strip()
             elif line.startswith('END:VEVENT'):
-                if 'start_time' in event and 'end_time' in event and 'location' in event and 'organizer' in event:
+                if 'start_time' in event and 'end_time' in event and 'summary' in event and 'location' in event and 'organizer' in event:
                     courses_today.append(event)
                 inside_vevent = False
 
@@ -269,10 +269,13 @@ def build_response_api():
     old_datetime = datetime.fromtimestamp(oldTime, paris_tz)
     new_datetime = datetime.fromtimestamp(newtime, paris_tz)
     
-    if (newtime - oldTime) > (3600*6) or old_datetime.date() != new_datetime.date():
+    if (newtime - oldTime) > (3600) or old_datetime.date() != new_datetime.date() or not os.path.isfile('cours_du_jour.json'):
         build_Json(combine_calendar(import_calendar()),fixed_time)
         oldTime = newtime
-    
+    else:
+
+        print("pas actualisé")
+
     #verification de cbn temps j'ai télécharger les fichier et plus de 30min je retelecharge
   
 
