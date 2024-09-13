@@ -77,8 +77,58 @@ def build_Json(calendar_file, fixed_time=None):
         
 
 
+def next_course(json_file, location1, fixed_time=None):
+    # Fuseau horaire Paris
+    paris_tz = pytz.timezone('Europe/Paris')
+    
+    # Récupérer l'heure actuelle ou fixer l'heure passée en argument
+    if fixed_time:
+        current_time = datetime.fromisoformat(fixed_time).astimezone(paris_tz)
+    else:
+        current_time = datetime.now(tz=paris_tz).strftime('%H:%M')
+
+    # Lire le fichier JSON
+    with open(json_file, 'r') as f:
+        data = json.load(f)
+    
+    # Filtrer les cours pour la localisation donnée
+    courses_in_location=[]
+    for course in data:
+        if course["location"] == location1:
+            courses_in_location.append(course)
+            
+    if not courses_in_location:
+        return None  # Aucun cours trouvé pour cet emplacement
+
+    # Trier les cours par heure de début
+    sorted_courses = sorted(courses_in_location, key=lambda x: x.get('start_time'))
+    # Parcourir les cours triés pour trouver le prochain
+    for course in sorted_courses:
+        # Convertir l'heure de début du cours en objet datetime dans le fuseau Paris
+        # Parse the start_time and assign the timezone
+        
+        start_time = datetime.strptime(course['start_time'], '%H:%M').replace(tzinfo=paris_tz)
+
+        # Format the start_time
+        formatted_start_time = start_time.strftime('%H:%M')
+        # Comparer l'heure de début du cours avec l'heure actuelle
+        if formatted_start_time > current_time:
+            print("aaaaa")
+            print(course['start_time'])
+            print(course['end_time'])
+            return {
+                "Début": course['start_time'],
+                "Fin": course['end_time'],
+                "Prof": course['organizer'],
+                "Résumé": course['summary']
+            }
+    
+    # Si aucun cours futur n'est trouvé, retourner None
+    return None
+
+
 def json1(fixed_time=None):
-    toutes_salles = ["A001","E101", "E102", "E103", "E104", "E105", "E106", "E107", "E108", "E109", "E209", "E210", "E211", "E212", "E213", "E214", "E215", "E217", "E218"]
+    toutes_salles = ["A001", "E101", "E102", "E103", "E104", "E105", "E106", "E107", "E108", "E109", "E209", "E210", "E211", "E212", "E213", "E214", "E215", "E217", "E218"]
 
     # Lecture du fichier "cours_du_jour.json"
     with open('cours_du_jour.json', 'r') as f:
@@ -99,6 +149,7 @@ def json1(fixed_time=None):
         location_data = verif_location("cours_du_jour.json", salle)
         current_courses = verif_time(location_data, fixed_time)
 
+        # Vérification des cours en cours
         if current_courses:
             for current_course in current_courses:
                 course_info = {
@@ -117,28 +168,28 @@ def json1(fixed_time=None):
                 
                 if not already_exists:
                     salles_remplies.append({salle: course_info})
-        else:
-            next_course_info = next_course("cours_du_jour.json", salle, fixed_time)
-            if next_course_info:
-                course_info = {
-                    "Début": next_course_info['start_time'],
-                    "Fin": next_course_info['end_time'],
-                    "Prof": next_course_info['organizer'],
-                    "Résumé": next_course_info['summary']
-                }
-                
-                # Vérifier les doublons dans salles_vide_prochain_cours
-                already_exists = False
-                for course in salles_vide_prochain_cours:
-                    if course.get(salle) == course_info:
-                        already_exists = True
-                        break
-                
-                if not already_exists:
-                    salles_vide_prochain_cours.append({salle: course_info})
 
+        # Vérification des prochains cours même s'il y a un cours en cours
+        next_course_info = next_course("cours_du_jour.json", salle, fixed_time)
+        if next_course_info:
+            course_info = {
+                "Début": next_course_info['start_time'],
+                "Fin": next_course_info['end_time'],
+                "Prof": next_course_info['organizer'],
+                "Résumé": next_course_info['summary']
+            }
+            
+            # Vérifier les doublons dans salles_vide_prochain_cours
+            already_exists = False
+            for course in salles_vide_prochain_cours:
+                if course.get(salle) == course_info:
+                    already_exists = True
+                    break
+            
+            if not already_exists:
+                salles_vide_prochain_cours.append({salle: course_info})
 
-    salles_vide_journee = [salle for salle in toutes_salles if salle not in salles_remplies and salle not in salles_vide_prochain_cours and salle!="A001"]
+    salles_vide_journee = [salle for salle in toutes_salles if salle not in salles_remplies and salle not in salles_vide_prochain_cours and salle != "A001"]
 
     resultat = {
         "salles_vide_journee": {
@@ -165,31 +216,7 @@ def verif_location(json_file, location):
 
     return verif_location
 
-def next_course(json_file, location, fixed_time=None):
-    paris_tz = pytz.timezone('Europe/Paris')
-    
-    if fixed_time:
-        current_time = datetime.fromisoformat(fixed_time).astimezone(paris_tz).strftime('%H:%M')
-    else:
-        current_time = datetime.now(tz=paris_tz).strftime('%H:%M')
 
-    with open(json_file, 'r') as f:
-        data = json.load(f)
-    
-    courses_in_location = [course for course in data if course.get('location') == location]
-
-    if not courses_in_location:
-        return None  # Aucun cours
-
-    # Trier les cours par ordre croissant de leur heure de début
-    sorted_courses = sorted(courses_in_location, key=lambda x: x.get('start_time'))
-
-    for course in sorted_courses:
-        start_time = datetime.strptime(course['start_time'], '%H:%M').replace(tzinfo=paris_tz).strftime('%H:%M')
-        if start_time > current_time:
-            return course
-
-    return None
 
 def verif_time(courses, fixed_time=None):
     paris_tz = pytz.timezone('Europe/Paris')
